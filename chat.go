@@ -323,6 +323,7 @@ type ChatCompletionResponse struct {
 func (c *Client) CreateChatCompletion(
 	ctx context.Context,
 	request ChatCompletionRequest,
+	extraHeaders ...http.Header,
 ) (response ChatCompletionResponse, err error) {
 	if request.Stream {
 		err = ErrChatCompletionStreamNotSupported
@@ -335,7 +336,7 @@ func (c *Client) CreateChatCompletion(
 		return
 	}
 
-	req, err := c.newRequest(ctx, http.MethodPost, c.fullURL(urlSuffix, request.Model), withBody(request))
+	req, err := c.newRequest(ctx, http.MethodPost, c.fullURL(urlSuffix, request.Model), withBody(request), withExtraHeaders(extraHeaders))
 	if err != nil {
 		return
 	}

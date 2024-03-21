@@ -89,6 +89,16 @@ func withBetaAssistantV1() requestOption {
 	}
 }
 
+func withExtraHeaders(headers []http.Header) requestOption {
+	return func(args *requestOptions) {
+		for _, header := range headers {
+			for k, v := range header {
+				args.header[k] = append(args.header[k], v...)
+			}
+		}
+	}
+}
+
 func (c *Client) newRequest(ctx context.Context, method, url string, setters ...requestOption) (*http.Request, error) {
 	// Default Options
 	args := &requestOptions{
